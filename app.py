@@ -1,8 +1,7 @@
 import os
 import uuid
 import openai
-from flask import Flask, jsonify, request, send_file, redirect, flash
-
+from flask import Flask, jsonify, request, send_from_directory, flash, redirect
 UPLOAD_FOLDER = 'files'
 
 app = Flask(__name__)
@@ -21,6 +20,10 @@ if not os.path.exists(UPLOAD_FOLDER):
 @app.route('/')
 def root():
     return app.send_static_file('index.html')
+
+@app.route('/static/<path:filename>')
+def serve_static(filename):
+    return send_from_directory(app.root_path + '/static', filename)
 
 @app.route('/save-record', methods=['POST'])
 def save_record():
